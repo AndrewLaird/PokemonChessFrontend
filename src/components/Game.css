@@ -1,0 +1,8 @@
+.game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw; /* full width of the viewport */
+  padding: 20px; /* Optional: for some space from the screen edges */
+}
