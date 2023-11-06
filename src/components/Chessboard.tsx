@@ -1,42 +1,72 @@
-import React from 'react';
-import { ChessState, ChessPieceType, Piece } from '../utils/chess_structs';
+// ChessBoard.tsx
+import React, { useState } from 'react';
+import { ChessState, Move, Piece, InteractionType, Player } from '../utils/chess_structs';
 import './Chessboard.css';
+import Piece_Component from './Piece';
 
 interface ChessBoardProps {
   chessState: ChessState;
+  onPieceClick: (row: number, col: number) => void;
+  makeMove: (move: Move) => void; // new prop for making a move
+  validMoves: Move[];
 }
 
-// This function can convert a ChessPieceType into a string or Unicode chess character.
-function getPieceSymbol(piece: Piece): string {
-  // convert the piece_type to a piece_type 
-  let piece_type = piece.piece_type as ChessPieceType;
-
-
-  switch (piece_type) {
-    case ChessPieceType.WhitePawn: return '♙';
-    case ChessPieceType.WhiteKnight: return '♘';
-    case ChessPieceType.WhiteBishop: return '♗';
-    case ChessPieceType.WhiteRook: return '♖';
-    case ChessPieceType.WhiteQueen: return '♕';
-    case ChessPieceType.WhiteKing: return '♔';
-    case ChessPieceType.BlackPawn: return '♟︎';
-    case ChessPieceType.BlackKnight: return '♞';
-    case ChessPieceType.BlackBishop: return '♝';
-    case ChessPieceType.BlackRook: return '♜';
-    case ChessPieceType.BlackQueen: return '♛';
-    case ChessPieceType.BlackKing: return '♚';
-    default: return '';
+function getTypeInterationColor(typeInteraction: InteractionType| undefined): string {
+  switch(typeInteraction) {
+    case InteractionType.SuperEffective: return "highlight-attack-super-effective";
+    case InteractionType.Normal: return "highlight-attack";
+    case InteractionType.NotVeryEffective: return "highlight-attack-not-very-effective";
+    case InteractionType.NoEffect: return "highlight-attack-no-effect";
+    default: return "";
   }
+
 }
 
-const ChessBoard: React.FC<ChessBoardProps> = ({ chessState }) => {
+function getSquareColor(row: number, col: number, validMoves: Move[]): string {
+  const validMove = validMoves.find(move => move.to_row === row && move.to_col === col);
+  const baseClass = (row + col) % 2 === 0 ? "white-square" : "black-square";
+  if(validMove === undefined) {
+    return baseClass;
+  }
+  const isAttack = validMove.capture !== null;
+  console.log(validMove);
+  if(isAttack) {
+    if(validMove.type_interaction === null) {
+      return `${baseClass} ${"highlight-attack"}`;
+    }
+    return `${baseClass} ${getTypeInterationColor(validMove.type_interaction)}`;
+  }
+  return `${baseClass} ${"highlight-move"}`;
+}
+
+
+const ChessBoard: React.FC<ChessBoardProps> = ({ chessState, onPieceClick, makeMove, validMoves }) => {
+
+  const handleSquareClick = (row: number, col: number) => {
+    const validMove = validMoves.find(move => move.to_row === row && move.to_col === col);
+
+    if (validMove) {
+      // If a piece is selected and the move is valid, make the move and reset the selected piece
+      makeMove(validMove);
+    } else {
+      // If no piece is selected or the move isn't valid, just handle it as a regular piece click
+      onPieceClick(row, col);
+    }
+  };
+
   return (
     <div className="chess-board">
-      {chessState.chessboard.board.map((row, rowIndex) => (
+      {[...chessState.chessboard.board].reverse().map((row, rowIndex) => (
         <div key={rowIndex} className="board-row">
           {row.map((piece, colIndex) => (
-            <div key={colIndex} className="board-square">
-              {getPieceSymbol(piece)}
+            <div 
+              key={colIndex} 
+              className={`board-square ${getSquareColor(7 - rowIndex, colIndex, validMoves)}`} 
+              onClick={() => handleSquareClick(7 - rowIndex, colIndex)}
+            >
+              <Piece_Component 
+                piece={piece} 
+              />
             </div>
           ))}
         </div>
@@ -46,4 +76,3 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ chessState }) => {
 };
 
 export default ChessBoard;
-

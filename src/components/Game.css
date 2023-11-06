@@ -2,7 +2,62 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align:center;
   height: 100vh;
   width: 100vw; /* full width of the viewport */
-  padding: 20px; /* Optional: for some space from the screen edges */
+  background: #282c34; /* Just a background, you can customize as you see fit */
+}
+
+.scaling-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70vmin; /* This will be 90% of the minimum value between the height and the width of the viewport. */
+  height:90vh;
+  background: white; /* Just a background, you can customize as you see fit */
+  box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.2); /* Optional: for a shadow effect */
+  padding: 2vmin; /* Optional: for spacing between the elements */
+}
+
+/* CSS for mobile devices */
+@media screen and (max-width: 1000px) { /* Adjust 600px to the breakpoint you desire */
+    .scaling-container {
+        min-width: 90vw; /* Increased width for mobile devices */
+        height: auto; /* Adjust height as needed for mobile layout */
+    }
+}
+/* Styles that apply when width is less than height (portrait mode) */
+@media screen and (max-aspect-ratio: 1/1) {
+    .scaling-container {
+        min-width: 90vw; /* Adjust as needed */ 
+        height: auto; 
+    }
+}
+
+
+
+/* Other styles remain unchanged */
+
+.chess-title {
+  /* Maximum width of the image is 100% of the container width */
+  max-width: 100%;
+  /* Automatic height to maintain the aspect ratio of the image */
+  height: auto;
+  /* A margin for spacing between the title image and the chessboard */
+  margin-bottom: 2vmin;
+  /* You might want to add a maximum height as well, depending on your design */
+  max-height: 10vmin;
+  /* Center the image if it doesn't fill the whole width */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Your chessboard component's main container should now just fill up the available space, thanks to flexbox */
+
+.chess-board {
+  /* Regular layout properties, no need for absolute positioning */
+  width: 100%; /* It will take the full width of the .scaling-container */
+  flex-grow: 1; /* It will take as much height as possible, respecting the other elements' size in the .scaling-container */
+  /* Other styling as needed */
 }

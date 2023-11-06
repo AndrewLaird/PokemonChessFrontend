@@ -1,0 +1,11 @@
+.message-banner {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  text-align: center;
+  font-size: 1.2em;
+  color: #333;
+}
+

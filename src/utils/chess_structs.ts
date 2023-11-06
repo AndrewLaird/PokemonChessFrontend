@@ -4,6 +4,13 @@ export enum Player {
   Black = "Black",
 }
 
+export enum Winner {
+  White = "White",
+  Black = "Black",
+  Tie = "Tie",
+  NoneYet = "NoneYet"
+}
+
 export enum ChessPieceType {
   Empty = "Empty",
   WhitePawn = "WhitePawn",
@@ -92,7 +99,26 @@ export interface ChessBoard {
   history: ChessHistory;
 }
 
+// Convert Rust enums to TypeScript enums
+export enum InfoMessage {
+  SuperEffective = "SuperEffective",
+  NotVeryEffective = "NotVeryEffective",
+  NoEffect = "NoEffect",
+}
+
+// Convert Rust struct Settings to a TypeScript interface
+export interface Settings {
+  simplifiedVisual: boolean;
+  onlinePlay: boolean;
+  criticalHits: boolean;
+  misses: boolean;
+}
+
 export interface ChessState {
   chessboard: ChessBoard;
+  settings: Settings;
   player: Player;
+  winner: Winner;
+  info_message?: InfoMessage;
 }
+

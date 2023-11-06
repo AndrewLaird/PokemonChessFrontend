@@ -1,25 +1,81 @@
 .chess-board {
   display: flex;
   flex-direction: column;
-  width: 80hw;
-  height: 90vh;
+  margin: auto;
+  position: relative; /* Necessary for absolute positioning of the board rows */
 }
 
 .board-row {
   display: flex;
   flex-direction: row;
+  width: 100%; /* Full width of the chess-board */
+  flex: 1; /* Distribute space equally among rows */
 }
 
 .board-square {
-  width: 50px;
-  height: 50px;
-  display: flex;
+  flex: 1;  /* Distribute space equally within each row */
+  display: flex; 
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
+  position: relative; /* Necessary for absolute positioning of the pieces */
+  border: 2px solid black;
+}
+
+/* Maintain aspect ratio for the squares */
+.board-square::after {
+  content: '';
+  display: block;
+  padding-top: 100%; /* This maintains the 1:1 aspect ratio */
+  pointer-events: none; /* Ensures clicks on squares go through the pseudo-element */
+}
+
+.white-square {
   background-color: #f0d9b5;
 }
 
-.board-square:nth-child(even) {
+.black-square {
   background-color: #b58863;
 }
+
+/* For a move highlight */
+.highlight-move {
+    background-color: yellow;
+    transition: background-color 0.3s ease; /* optional: for smooth color transition */
+}
+
+/* For a normal attack highlight */
+.highlight-attack {
+    /* grey */
+    background-color: #9E9E9E;
+    transition: background-color 0.3s ease;
+}
+
+/* Super Effective Attack Highlight */
+.highlight-attack-super-effective {
+    background-color: #4CAF50; /* Bright green */
+    transition: background-color 0.3s ease;
+}
+
+/* Not Very Effective Attack Highlight */
+.highlight-attack-not-very-effective {
+   /* Light red */
+    background-color: #F44336;
+    transition: background-color 0.3s ease;
+}
+
+/* No Effect Attack Highlight */
+.highlight-attack-no-effect {
+    background-color: white; /* Light grey */
+    transition: background-color 0.3s ease;
+}
+
+/* Adjust the size and position of the chess pieces */
+.piece {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centers the piece in the square */
+  font-size: 5vw; /* Adjusts the font size of the chess piece characters */
+  pointer-events: none; /* Ensures clicks go through to the square */
+}
+

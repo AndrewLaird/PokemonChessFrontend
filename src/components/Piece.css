@@ -1,0 +1,105 @@
+/*.piece {*/
+  /*[> example styles, adjust as necessary <]*/
+  /*width: 80px; [> relative to the parent square <]*/
+  /*height: 80px; [> relative to the parent square <]*/
+  /*position: absolute;*/
+  /*top: 10%; [> centers the piece <]*/
+  /*left: 10%; [> centers the piece <]*/
+/*}*/
+
+
+.piece {
+  display: inline-block; /* Helps control the width to content */
+}
+
+/* Styling for the text to sit 20% from the bottom */
+.piece-type-description {
+  position: absolute;
+  bottom: 5%; /* Positions the element 20% from the bottom */
+  left: 50%; /* Centers the element horizontally */
+  min-width: 80%; /* Adjust to fit your design */
+  transform: translateX(-50%); /* Centers the element horizontally */
+  background-color: #f2f2f2; /* Adjust to your desired background color */
+  padding: 2px 8px; /* Adds some spacing around the text */
+  border-radius: 12px; /* Makes edges rounded */
+  font-size: 14px; /* Adjust to fit your design */
+  color: #FFF;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Adds shadow */
+  /* Add more styles as needed */
+}
+
+/* Color themes for different Pokémon types (as an example) */
+.Normal {
+    background-color: #A8A77A;
+}
+
+.Fire {
+    background-color: #EE8130;
+}
+
+.Water {
+    background-color: #6390F0;
+}
+
+.Electric {
+    background-color: #F7D02C;
+}
+
+.Grass {
+    background-color: #7AC74C;
+}
+
+.Ice {
+    background-color: #96D9D6;
+}
+
+.Fighting {
+    background-color: #C22E28;
+}
+
+.Poison {
+    background-color: #A33EA1;
+}
+
+.Ground {
+    background-color: #E2BF65;
+}
+
+.Flying {
+    background-color: #A98FF3;
+}
+
+.Psychic {
+    background-color: #F95587;
+}
+
+.Bug {
+    background-color: #A6B91A;
+}
+
+.Rock {
+    background-color: #B6A136;
+}
+
+.Ghost {
+    background-color: #735797;
+}
+
+.Dragon {
+    background-color: #6F35FC;
+}
+
+.Dark {
+    background-color: #705746;
+}
+
+.Steel {
+    background-color: #B7B7CE;
+}
+
+.Fairy {
+    background-color: #D685AD;
+}
+
+/* ... add more styles for other Pokémon types */
+

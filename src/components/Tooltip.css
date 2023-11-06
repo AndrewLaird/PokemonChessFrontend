@@ -1,0 +1,53 @@
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-box {
+}
+
+/* Positioning for the tooltip */
+.tooltip-top {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+}
+
+.tooltip-bottom {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+}
+
+.tooltip-left {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 5px;
+}
+
+.tooltip-right {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 5px;
+}
+
+
+.tooltip-box {
+  position: absolute;
+  /* Set max-width to a value that fits your layout */
+  /* Wrap text in the tooltip */
+  white-space: normal;
+  /* Other styling for your tooltip */
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  z-index: 1;
+  min-width:10vw;
+}
+

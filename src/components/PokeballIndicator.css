@@ -1,0 +1,14 @@
+.pokeball{
+  height:5vh;
+}
+.pokeball-left{
+  margin-left:0px;
+  margin-right:auto;
+}
+.pokeball-right{
+  margin-left:auto;
+  margin-right:0px;
+}
+.pokeball-hidden{
+  visibility:hidden
+}
