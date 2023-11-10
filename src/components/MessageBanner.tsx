@@ -1,11 +1,31 @@
 import React from 'react';
 import { ChessState, InfoMessage, Winner } from '../utils/chess_structs';
+import './MessageBanner.css';
+import announcerMessages from './announcerMessages';
 
 interface MessageBannerProps {
   chessState: ChessState;
+  turn: number;
+  game_name: string;
 }
 
-const MessageBanner: React.FC<MessageBannerProps> = ({ chessState }) => {
+const MessageBanner: React.FC<MessageBannerProps> = ({ chessState, turn, game_name }) => {
+  const getSeedFromName = (name: string): number => {
+    return name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  };
+
+  const seededRandom = (seed: number): number => {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  };
+
+  const getRandomMessage = (gameName: string, turn: number): string => {
+    const nameSeed = getSeedFromName(gameName);
+    const combinedSeed = nameSeed + turn;
+    const index = Math.floor(seededRandom(combinedSeed) * announcerMessages.length);
+    return announcerMessages[index];
+  };
+
   const getInfoMessage = (info_message?: InfoMessage) => {
     switch (info_message) {
       case InfoMessage.SuperEffective:
@@ -34,10 +54,8 @@ const MessageBanner: React.FC<MessageBannerProps> = ({ chessState }) => {
 
   // Get the current message based on the game state
   const winnerMessage = getWinnerMessage(chessState.winner);
-  console.log(chessState);
-  console.log(chessState.info_message, getInfoMessage(chessState.info_message))
   const info_message = chessState.info_message ? getInfoMessage(chessState.info_message) : null;
-  const message = winnerMessage || info_message; // winnerMessage takes precedence over info_message.
+  const message = winnerMessage || info_message || getRandomMessage(game_name, turn); // winnerMessage takes precedence over info_message.
 
   // Only render the banner if there's a message to show
   return message ? (

@@ -56,7 +56,7 @@ function Game() {
     <div className="game-container">
       <div className="scaling-container">
         <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
-        {chessState && <MessageBanner chessState={chessState} />}
+        {chessState && <MessageBanner chessState={chessState} turn={chessState.chessboard.history.move_history.length} game_name={pokemon_name} />}
         {chessState && (
           <>
             <PokeballIndicator displayLeft={true} hidden={chessState.player == Player.White}/>

@@ -19,12 +19,11 @@ function getTypeInterationColor(typeInteraction: InteractionType| undefined): st
     case InteractionType.NoEffect: return "highlight-attack-no-effect";
     default: return "";
   }
-
 }
 
 function getSquareColor(row: number, col: number, validMoves: Move[]): string {
   const validMove = validMoves.find(move => move.to_row === row && move.to_col === col);
-  const baseClass = (row + col) % 2 === 0 ? "white-square" : "black-square";
+  const baseClass = (row + col) % 2 === 1 ? "white-square" : "black-square";
   if(validMove === undefined) {
     return baseClass;
   }
