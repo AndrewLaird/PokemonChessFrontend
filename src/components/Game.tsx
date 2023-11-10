@@ -13,6 +13,7 @@ function Game() {
   // Asserting that pokemon_name will be a string using 'as string'
   const { pokemon_name } = useParams() as { pokemon_name: string };
   const [chessState, setChessState] = useState<ChessState | null>(null);
+  // @TODO show the selected piece with a css highlight
   const [validMoves, setValidMoves] = useState<Move[]>([]);
 
   useEffect(() => {
