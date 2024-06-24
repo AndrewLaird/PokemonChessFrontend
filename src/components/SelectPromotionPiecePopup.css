@@ -1,0 +1,35 @@
+.promotion-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 1);
+  font-family: 'Press Start 2P', cursive; /* Pixelated font similar to Pokémon Red */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+}
+
+
+.promotion-options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.promotion-options button {
+  padding: 10px 20px;
+  font-size: 50px;
+  width: 45%;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.promotion-options button:hover {
+  background-color: #e0e0e0;
+}

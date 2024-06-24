@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChessState, Move, Player } from '../utils/chess_structs';
-import { getMoves, movePiece, getGameState } from '../utils/api_functions'; // ensure you import your API function for making a move
+import { getMoves, movePiece, getGameState, selectPawnPromotionPiece } from '../utils/api_functions'; // ensure you import your API function for making a move
 import Chessboard from './Chessboard';
 import './Game.css';
 import PokeballIndicator from './PokeballIndicator'
@@ -41,6 +41,16 @@ function Game() {
     }
   }
 
+  async function handlePieceSelection(piece: string) {
+    try {
+      const updatedState = await selectPawnPromotionPiece(pokemon_name, piece);
+      setChessState(updatedState);
+    } catch (error) {
+      console.error("Failed to select pawn promotion piece", error);
+    }
+  
+  }
+
   // Function to handle making a move
   async function handleMakeMove(move: Move) {
     try {
@@ -64,6 +74,7 @@ function Game() {
             <Chessboard 
               chessState={chessState} 
               onPieceClick={handlePieceClick} 
+              onPieceSelection={handlePieceSelection}
               makeMove={handleMakeMove}
               validMoves={validMoves} 
             />

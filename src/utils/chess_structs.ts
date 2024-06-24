@@ -120,5 +120,6 @@ export interface ChessState {
   player: Player;
   winner: Winner;
   info_message?: InfoMessage;
+  require_piece_selection: boolean;
 }
 

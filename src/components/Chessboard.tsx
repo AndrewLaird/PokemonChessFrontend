@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { ChessState, Move, Piece, InteractionType, Player } from '../utils/chess_structs';
 import './Chessboard.css';
 import Piece_Component from './Piece';
+import SelectPromotionPiecePopup from './SelectPromotionPiecePopup'
 
 interface ChessBoardProps {
   chessState: ChessState;
   onPieceClick: (row: number, col: number) => void;
   makeMove: (move: Move) => void; // new prop for making a move
+  onPieceSelection: (piece: string) => void;
   validMoves: Move[];
 }
 
@@ -39,11 +41,10 @@ function getSquareColor(row: number, col: number, validMoves: Move[]): string {
 }
 
 
-const ChessBoard: React.FC<ChessBoardProps> = ({ chessState, onPieceClick, makeMove, validMoves }) => {
+const ChessBoard: React.FC<ChessBoardProps> = ({ chessState, onPieceClick, makeMove, onPieceSelection, validMoves }) => {
 
   const handleSquareClick = (row: number, col: number) => {
     const validMove = validMoves.find(move => move.to_row === row && move.to_col === col);
-
     if (validMove) {
       // If a piece is selected and the move is valid, make the move and reset the selected piece
       makeMove(validMove);
@@ -55,6 +56,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ chessState, onPieceClick, makeM
 
   return (
     <div className="chess-board">
+      <SelectPromotionPiecePopup isOpen={chessState.require_piece_selection} onPieceSelection={onPieceSelection} />
       {[...chessState.chessboard.board].reverse().map((row, rowIndex) => (
         <div key={rowIndex} className="board-row">
           {row.map((piece, colIndex) => (

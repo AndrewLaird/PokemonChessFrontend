@@ -15,7 +15,7 @@
 /* Styling for the text to sit 20% from the bottom */
 .piece-type-description {
   position: absolute;
-  bottom: 5%; /* Positions the element 20% from the bottom */
+  top: 70%;
   left: 50%; /* Centers the element horizontally */
   min-width: 80%; /* Adjust to fit your design */
   transform: translateX(-50%); /* Centers the element horizontally */

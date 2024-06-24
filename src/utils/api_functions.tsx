@@ -103,4 +103,20 @@ async function getGameState(gameName: string): Promise<ChessState | null> {
     }
 }
 
-export { startGame, getMoves, movePiece, generateName, getGameState };
+async function selectPawnPromotionPiece(sessionName: string, pieceStr: string): Promise<ChessState> { 
+  try { 
+      const response = await axios.get<ChessState>('http://localhost:3000/select_pawn_promotion_piece', {
+        params: { 
+          name: sessionName, piece_str: pieceStr,
+        }, 
+        headers: { 
+          Accept: 'application/json', 'Content-Type': 'application/json',
+        },
+      }); 
+      return response.data;
+  } catch (error) { 
+    throw error; // Handle error appropriately
+  }
+}
+
+export { startGame, getMoves, movePiece, generateName, getGameState, selectPawnPromotionPiece };
