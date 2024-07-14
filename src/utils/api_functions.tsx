@@ -3,8 +3,7 @@ import { ChessState, Move } from './chess_structs';
 
 async function startGame(
   sessionName: String,
-  simplifiedVisual: boolean,
-  onlinePlay: boolean,
+  localPlay: boolean,
   criticalHits: boolean,
   misses: boolean
 ): Promise<ChessState> {
@@ -12,8 +11,7 @@ async function startGame(
     const response = await axios.get<ChessState>('http://localhost:3000/start', {
       params: {
         name: sessionName,
-        simplified_visual: simplifiedVisual,
-        online_play: onlinePlay,
+        local_play: localPlay,
         critical_hits: criticalHits,
         misses: misses,
       },

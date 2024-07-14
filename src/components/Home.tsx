@@ -10,15 +10,13 @@ const Home: React.FC = () => {
     const handleNewGame = async () => {
         const gameName = await generateName();
         // get the inputs
-        const simplifiedVisual = document.getElementById('simplified-visual') as HTMLInputElement;
-        const onlinePlay = document.getElementById('online-play') as HTMLInputElement;
+        const localPlay = document.getElementById('local-play') as HTMLInputElement;
         const criticalHits = document.getElementById('critical-hits') as HTMLInputElement;
         const misses = document.getElementById('miss') as HTMLInputElement;
 
         await startGame(
           gameName,
-          simplifiedVisual.checked,
-          onlinePlay.checked,
+          localPlay.checked,
           criticalHits.checked,
           misses.checked
         );
@@ -35,16 +33,9 @@ const Home: React.FC = () => {
                 <div className="settings-container">
                     <h2 className="settings-title">Settings</h2>
                     <div className="setting">
-                        <input type="checkbox" id="simplified-visual" />
-                        <label htmlFor="simplified-visual">Simplified Visual</label><span className="spacer"></span>
-                        <Tooltip content="Your description for Simplified Visual here">
-                            <a href="#" className="info">?</a>
-                        </Tooltip>
-                    </div>
-                    <div className="setting">
-                        <input type="checkbox" id="online-play" />
-                        <label htmlFor="online-play">Online Play</label><span className="spacer"></span>
-                        <Tooltip content="Your description for Online Play here">
+                        <input type="checkbox" id="local-play" />
+                        <label htmlFor="local-play">Local Game</label><span className="spacer"></span>
+                        <Tooltip content="Board flips after each move, play on the same device">
                             <a href="#" className="info">?</a>
                         </Tooltip>
                     </div>
