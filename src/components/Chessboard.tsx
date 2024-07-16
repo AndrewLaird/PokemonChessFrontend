@@ -41,7 +41,7 @@ function getSquareColor(row: number, col: number, validMoves: Move[]): string {
 }
 
 
-const ChessBoard: React.FC<ChessBoardProps> = ({ chessState, onPieceClick, makeMove, onPieceSelection, validMoves }) => {
+const ChessBoard: React.FC<ChessBoardProps> = ({ chessState, onPieceClick, makeMove, onPieceSelection, validMoves}) => {
 
   const handleSquareClick = (row: number, col: number) => {
     const validMove = validMoves.find(move => move.to_row === row && move.to_col === col);

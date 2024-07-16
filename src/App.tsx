@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/:pokemon_name" element={<Game />} />
+        <Route path="/:pokemon_name/:player?" element={<Game />} />
       </Routes>
     </Router>
   );

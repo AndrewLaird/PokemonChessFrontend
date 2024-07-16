@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ChessState, Move } from './chess_structs';
+import { ChessState, Settings, Move } from './chess_structs';
 
 async function startGame(
   sessionName: String,
@@ -33,6 +33,23 @@ async function getMoves(sessionName: string, row: number, col: number): Promise<
         name: sessionName,
         row,
         col,
+      },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error; // Handle error appropriately
+  }
+}
+
+async function getSettings(sessionName: string): Promise<Settings> {
+  try {
+    const response = await axios.get<Settings>('http://localhost:3000/get_settings', {
+      params: {
+        name: sessionName,
       },
       headers: {
         Accept: 'application/json',
@@ -117,4 +134,4 @@ async function selectPawnPromotionPiece(sessionName: string, pieceStr: string): 
   }
 }
 
-export { startGame, getMoves, movePiece, generateName, getGameState, selectPawnPromotionPiece };
+export { startGame, getMoves, getSettings, movePiece, generateName, getGameState, selectPawnPromotionPiece };

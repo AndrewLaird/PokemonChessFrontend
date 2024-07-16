@@ -58,7 +58,7 @@
 
 .chess-board {
   /* Regular layout properties, no need for absolute positioning */
-  width: 100%; /* It will take the full width of the .scaling-container */
+  width: 60%; /* It will take the full width of the .scaling-container */
   flex-grow: 1; /* It will take as much height as possible, respecting the other elements' size in the .scaling-container */
   /* Other styling as needed */
 }

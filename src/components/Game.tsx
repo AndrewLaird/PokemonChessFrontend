@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ChessState, Move, Player } from '../utils/chess_structs';
-import { getMoves, movePiece, getGameState, selectPawnPromotionPiece } from '../utils/api_functions'; // ensure you import your API function for making a move
+import { ChessState, Settings, Move, Player } from '../utils/chess_structs';
+import { getMoves, movePiece, getGameState, getSettings, selectPawnPromotionPiece } from '../utils/api_functions'; // ensure you import your API function for making a move
 import Chessboard from './Chessboard';
 import './Game.css';
 import PokeballIndicator from './PokeballIndicator'
@@ -11,9 +11,8 @@ import PokemonTitle from '../assets/PokemonTitle.png';
 
 function Game() {
   // Asserting that pokemon_name will be a string using 'as string'
-  const { pokemon_name } = useParams() as { pokemon_name: string };
+  const { pokemon_name, player } = useParams() as { pokemon_name: string, player: string };
   const [chessState, setChessState] = useState<ChessState | null>(null);
-  // @TODO show the selected piece with a css highlight
   const [validMoves, setValidMoves] = useState<Move[]>([]);
 
   useEffect(() => {
@@ -28,7 +27,6 @@ function Game() {
         console.error("Failed to fetch chess board", error);
       }
     }
-
     loadChessBoard();
   }, []);
 

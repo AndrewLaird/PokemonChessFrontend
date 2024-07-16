@@ -108,8 +108,7 @@ export enum InfoMessage {
 
 // Convert Rust struct Settings to a TypeScript interface
 export interface Settings {
-  simplifiedVisual: boolean;
-  onlinePlay: boolean;
+  localPlay: boolean;
   criticalHits: boolean;
   misses: boolean;
 }
