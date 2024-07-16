@@ -75,6 +75,7 @@ function Game() {
               onPieceSelection={handlePieceSelection}
               makeMove={handleMakeMove}
               validMoves={validMoves} 
+              isFlipped={player !== "black"}
             />
             <PokeballIndicator displayLeft={false} hidden={chessState.player == Player.Black}/>
           </>
