@@ -9,6 +9,23 @@
   margin-left:auto;
   margin-right:0px;
 }
-.pokeball-hidden{
-  visibility:hidden
+
+.pokeball-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.pokeball-spinning {
+  animation: spin 1s linear infinite;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
