@@ -76,8 +76,8 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     return board.map((row, rowIndex) => (
       <div key={rowIndex} className="board-row">
         {row.map((piece, colIndex) => {
-          const actualRow = isFlipped ? rowIndex : 7 - rowIndex;
-          const actualCol = isFlipped ? 7 - colIndex : colIndex;
+          const actualRow = isFlipped ? 7 - rowIndex: rowIndex;
+          const actualCol = isFlipped ? 7 - colIndex: colIndex;
           return (
             <div
               key={colIndex}

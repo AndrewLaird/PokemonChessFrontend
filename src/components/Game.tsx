@@ -14,6 +14,7 @@ function Game() {
   const { pokemon_name, player } = useParams() as { pokemon_name: string, player: string };
   const [chessState, setChessState] = useState<ChessState | null>(null);
   const [validMoves, setValidMoves] = useState<Move[]>([]);
+  const isFlipped = player !== "black";
 
   useEffect(() => {
     async function loadChessBoard() {
@@ -68,7 +69,10 @@ function Game() {
         {chessState && <MessageBanner chessState={chessState} turn={chessState.chessboard.history.move_history.length} game_name={pokemon_name} />}
         {chessState && (
           <>
-            <PokeballIndicator displayLeft={true} hidden={chessState.player == Player.White}/>
+            <PokeballIndicator
+            displayLeft={true} 
+            hidden={isFlipped ? chessState.player === Player.White : chessState.player === Player.Black}
+            />
             <Chessboard 
               chessState={chessState} 
               onPieceClick={handlePieceClick} 
@@ -77,7 +81,10 @@ function Game() {
               validMoves={validMoves} 
               isFlipped={player !== "black"}
             />
-            <PokeballIndicator displayLeft={false} hidden={chessState.player == Player.Black}/>
+            <PokeballIndicator 
+            displayLeft={false}
+            hidden={isFlipped ? chessState.player === Player.Black : chessState.player === Player.White}
+            />
           </>
         )}
       </div>
