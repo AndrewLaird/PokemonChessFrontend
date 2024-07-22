@@ -1,32 +1,63 @@
-.chess-board {
+.app-container {
   display: flex;
   flex-direction: column;
-  margin: auto;
-  position: relative; /* Necessary for absolute positioning of the board rows */
+  height: 100vh;
+  width: 100vw;
+}
+
+.game-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chess-board-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.chess-board {
+  width: 100%;
+  height: 100%;
+  max-width: min(100%, 80vmin);
+  max-height: min(100%, 80vmin);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .board-row {
   display: flex;
-  flex-direction: row;
-  width: 100%; /* Full width of the chess-board */
-  flex: 1; /* Distribute space equally among rows */
+  flex: 1;
 }
 
 .board-square {
-  flex: 1;  /* Distribute space equally within each row */
-  display: flex; 
-  justify-content: center;
-  align-items: center;
-  position: relative; /* Necessary for absolute positioning of the pieces */
-  border: 2px solid black;
+  flex: 1;
+  position: relative;
+  border: 1px solid black;
 }
 
-/* Maintain aspect ratio for the squares */
-.board-square::after {
+.board-square::before {
   content: '';
   display: block;
-  padding-top: 100%; /* This maintains the 1:1 aspect ratio */
-  pointer-events: none; /* Ensures clicks on squares go through the pseudo-element */
+  padding-top: 100%;
+}
+
+.board-square .piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(min(4vmin, 4vh));
 }
 
 .white-square {
@@ -37,45 +68,22 @@
   background-color: #b58863;
 }
 
-/* For a move highlight */
 .highlight-move {
-    background-color: yellow;
-    transition: background-color 0.3s ease; /* optional: for smooth color transition */
+  background-color: yellow;
 }
 
-/* For a normal attack highlight */
 .highlight-attack {
-    /* grey */
-    background-color: #9E9E9E;
-    transition: background-color 0.3s ease;
+  background-color: #9E9E9E;
 }
 
-/* Super Effective Attack Highlight */
 .highlight-attack-super-effective {
-    background-color: #4CAF50; /* Bright green */
-    transition: background-color 0.3s ease;
+  background-color: #4CAF50;
 }
 
-/* Not Very Effective Attack Highlight */
 .highlight-attack-not-very-effective {
-   /* Light red */
-    background-color: #F44336;
-    transition: background-color 0.3s ease;
+  background-color: #F44336;
 }
 
-/* No Effect Attack Highlight */
 .highlight-attack-no-effect {
-    background-color: white; /* Light grey */
-    transition: background-color 0.3s ease;
+  background-color: white;
 }
-
-/* Adjust the size and position of the chess pieces */
-.piece {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* Centers the piece in the square */
-  font-size: 5vw; /* Adjusts the font size of the chess piece characters */
-  pointer-events: none; /* Ensures clicks go through to the square */
-}
-

@@ -93,12 +93,14 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
   };
 
   return (
-    <div className="chess-board">
-      <SelectPromotionPiecePopup
-        isOpen={chessState.require_piece_selection}
-        onPieceSelection={onPieceSelection}
-      />
-      {renderBoard()}
+    <div className="chess-board-container">
+      <div className="chess-board">
+        <SelectPromotionPiecePopup
+          isOpen={chessState.require_piece_selection}
+          onPieceSelection={onPieceSelection}
+        />
+        {renderBoard()}
+      </div>
     </div>
   );
 };
