@@ -64,6 +64,7 @@ function Game() {
 
   return (
     <div className="game-container">
+      <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
       <div className="scaling-container">
         <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
         {chessState && <MessageBanner chessState={chessState} turn={chessState.chessboard.history.move_history.length} game_name={pokemon_name} />}
