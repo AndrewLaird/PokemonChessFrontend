@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { ChessState, Settings, Move } from './chess_structs';
 
+
+// if dev set to localhost:3000
+const baseURL = "http://localhost:3000";
+// const baseURL = "http://44.200.13.154:3000";
+
 async function startGame(
   sessionName: String,
   localPlay: boolean,
@@ -8,7 +13,7 @@ async function startGame(
   misses: boolean
 ): Promise<ChessState> {
   try {
-    const response = await axios.get<ChessState>('http://localhost:3000/start', {
+    const response = await axios.get<ChessState>(`${baseURL}/start`, {
       params: {
         name: sessionName,
         local_play: localPlay,
@@ -28,7 +33,7 @@ async function startGame(
 
 async function getMoves(sessionName: string, row: number, col: number): Promise<Move[]> {
   try {
-    const response = await axios.get<Move[]>('http://localhost:3000/get_moves', {
+    const response = await axios.get<Move[]>(`${baseURL}/get_moves`, {
       params: {
         name: sessionName,
         row,
@@ -47,7 +52,7 @@ async function getMoves(sessionName: string, row: number, col: number): Promise<
 
 async function getSettings(sessionName: string): Promise<Settings> {
   try {
-    const response = await axios.get<Settings>('http://localhost:3000/get_settings', {
+    const response = await axios.get<Settings>(`${baseURL}/get_settings`, {
       params: {
         name: sessionName,
       },
@@ -70,7 +75,7 @@ async function movePiece(
   toCol: number
 ): Promise<ChessState> {
   try {
-    const response = await axios.get<ChessState>('http://localhost:3000/move_piece', {
+    const response = await axios.get<ChessState>(`${baseURL}/move_piece`, {
       params: {
         name: sessionName,
         from_row: fromRow,
@@ -91,7 +96,7 @@ async function movePiece(
 
 async function generateName(){
   try {
-      const response = await axios.get<String>('http://localhost:3000/generate_name', {})
+      const response = await axios.get<String>(`${baseURL}/generate_name`, {})
       return response.data;
   } catch (error) {
     throw error; // Handle error appropriately
@@ -102,7 +107,7 @@ async function generateName(){
 // Function to get the game state using Axios
 async function getGameState(gameName: string): Promise<ChessState | null> {
     try {
-        const response = await axios.get<ChessState>('http://localhost:3000/get_game_state', {
+        const response = await axios.get<ChessState>(`${baseURL}/get_game_state`, {
             params: {
                 name: gameName
             },
@@ -120,7 +125,7 @@ async function getGameState(gameName: string): Promise<ChessState | null> {
 
 async function selectPawnPromotionPiece(sessionName: string, pieceStr: string): Promise<ChessState> { 
   try { 
-      const response = await axios.get<ChessState>('http://localhost:3000/select_pawn_promotion_piece', {
+      const response = await axios.get<ChessState>(`${baseURL}/select_pawn_promotion_piece`, {
         params: { 
           name: sessionName, piece_str: pieceStr,
         }, 
