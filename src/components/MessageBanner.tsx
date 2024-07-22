@@ -48,21 +48,18 @@ const MessageBanner: React.FC<MessageBannerProps> = ({ chessState, turn, game_na
       case Winner.Tie:
         return "Game over! It's a tie!";
       default:
-        return null; // When the winner is undefined or the game is ongoing without a NotYet state.
+        return null; 
     }
   };
 
   // Get the current message based on the game state
   const winnerMessage = getWinnerMessage(chessState.winner);
   const info_message = chessState.info_message ? getInfoMessage(chessState.info_message) : null;
-  const message = winnerMessage || info_message || getRandomMessage(game_name, turn); // winnerMessage takes precedence over info_message.
+  const message = winnerMessage || info_message || null //getRandomMessage(game_name, turn); // winnerMessage takes precedence over info_message.
 
-  // Only render the banner if there's a message to show
-  return message ? (
-    <div className="message-banner">
-      {message}
-    </div>
-  ) : null;
+  return <div className="message-banner" style={{'visibility': message ? 'visible' : 'hidden'}}>
+          {message}
+        </div>
 };
 
 export default MessageBanner;
