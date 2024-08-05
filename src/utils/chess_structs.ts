@@ -90,13 +90,10 @@ export interface Capture {
   piece: Piece;
 }
 
-export interface ChessHistory {
-  move_history: Move[];
-}
 
 export interface ChessBoard {
   board: Piece[][];
-  history: ChessHistory;
+  // you don't know about history it's private
 }
 
 // Convert Rust enums to TypeScript enums
@@ -120,5 +117,6 @@ export interface ChessState {
   winner: Winner;
   info_message?: InfoMessage;
   require_piece_selection: boolean;
+  turn_count: number;
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChessState, Settings, Move, Player } from '../utils/chess_structs';
-import { getMoves, movePiece, getGameState, getSettings, selectPawnPromotionPiece } from '../utils/api_functions'; // ensure you import your API function for making a move
+import { getMoves, movePiece, getGameState, selectPawnPromotionPiece, getPreviousState, getNextState } from '../utils/api_functions'; // ensure you import your API function for making a move
 import Chessboard from './Chessboard';
 import './Game.css';
 import PokeballIndicator from './PokeballIndicator'
@@ -61,13 +61,32 @@ function Game() {
       console.error("Failed to make a move", error);
     }
   }
+  
+  // undo move
+  async function undoMove() {
+    try {
+      const updatedState = await getPreviousState(pokemon_name);
+      setChessState(updatedState);
+    } catch (error) {
+      console.error("Failed to fetch chess board", error);
+    }
+  }
+  // redo move
+  async function redoMove() {
+    try {
+      const updatedState = await getNextState(pokemon_name);
+      setChessState(updatedState);
+    } catch (error) {
+      console.error("Failed to fetch chess board", error);
+    }
+  }
 
   return (
     <div className="game-container">
       <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
       <div className="scaling-container">
         <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
-        {chessState && <MessageBanner chessState={chessState} turn={chessState.chessboard.history.move_history.length} game_name={pokemon_name} />}
+        {chessState && <MessageBanner chessState={chessState} turn={chessState.turn_count} game_name={pokemon_name} />}
         {chessState && (
           <>
             <PokeballIndicator
@@ -86,6 +105,10 @@ function Game() {
             displayLeft={false}
             hidden={isFlipped ? chessState.player === Player.Black : chessState.player === Player.White}
             />
+            <div>
+              <button className="undo-btn state-btn" onClick={undoMove}></button>
+              <button className="redo-btn state-btn" onClick={redoMove}></button>
+            </div>
           </>
         )}
       </div>

@@ -50,23 +50,6 @@ async function getMoves(sessionName: string, row: number, col: number): Promise<
   }
 }
 
-async function getSettings(sessionName: string): Promise<Settings> {
-  try {
-    const response = await axios.get<Settings>(`${baseURL}/get_settings`, {
-      params: {
-        name: sessionName,
-      },
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw error; // Handle error appropriately
-  }
-}
-
 async function movePiece(
   sessionName: string,
   fromRow: number,
@@ -139,4 +122,30 @@ async function selectPawnPromotionPiece(sessionName: string, pieceStr: string): 
   }
 }
 
-export { startGame, getMoves, getSettings, movePiece, generateName, getGameState, selectPawnPromotionPiece };
+async function getPreviousState(gameName: string): Promise<ChessState> {
+    const response = await axios.get<ChessState>(`${baseURL}/get_previous_state`, {
+        params: {
+            name: gameName
+        },
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.data;
+}
+
+async function getNextState(gameName: string): Promise<ChessState> {
+    const response = await axios.get<ChessState>(`${baseURL}/get_next_state`, {
+        params: {
+            name: gameName
+        },
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.data;
+}
+
+export { startGame, getMoves, movePiece, generateName, getGameState, selectPawnPromotionPiece, getPreviousState, getNextState };
