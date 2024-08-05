@@ -1,120 +1,174 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { ChessState, Settings, Move, Player } from '../utils/chess_structs';
-import { getMoves, movePiece, getGameState, selectPawnPromotionPiece, getPreviousState, getNextState } from '../utils/api_functions'; // ensure you import your API function for making a move
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, Navigate } from 'react-router-dom';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { ChessState, Move, Player } from '../utils/chess_structs';
 import Chessboard from './Chessboard';
+import PokeballIndicator from './PokeballIndicator';
 import './Game.css';
-import PokeballIndicator from './PokeballIndicator'
-import MessageBanner from './MessageBanner';
-// Importing the image
 import PokemonTitle from '../assets/PokemonTitle.png';
 
-function Game() {
-  // Asserting that pokemon_name will be a string using 'as string'
-  const { pokemon_name, player } = useParams() as { pokemon_name: string, player: string };
+type ClientMessage = 
+  | { action: 'GetMoves', payload: { name: string, row: number, col: number } }
+  | { action: 'MovePiece', payload: { name: string, from_row: number, from_col: number, to_row: number, to_col: number } }
+  | { action: 'SelectPawnPromotionPiece', payload: { name: string, piece_str: string } }
+  | { action: 'GetPreviousState', payload: { name: string } }
+  | { action: 'GetNextState', payload: { name: string } };
+
+type ServerMessage = 
+  | { status: 'Success', data: { chess_state?: ChessState, moves?: Move[] } }
+  | { status: 'Error', message: string };
+
+const WEBSOCKET_URL = 'ws://localhost:3000/ws';
+
+const ChessGame: React.FC = () => {
+  const { pokemon_name, player } = useParams<{ pokemon_name?: string, player?: string }>();
   const [chessState, setChessState] = useState<ChessState | null>(null);
   const [validMoves, setValidMoves] = useState<Move[]>([]);
+  const [connectionStatus, setConnectionStatus] = useState<string>('Connecting');
+
   const isFlipped = player !== "black";
 
+  const { 
+    sendMessage, 
+    lastMessage, 
+    readyState 
+  } = useWebSocket(WEBSOCKET_URL, {
+    reconnectAttempts: 5,
+    reconnectInterval: 3000,
+    shouldReconnect: (closeEvent) => true,
+  });
+
   useEffect(() => {
-    async function loadChessBoard() {
-      try {
-        if (!pokemon_name) {
-          return;
+    if (lastMessage !== null) {
+      const message: ServerMessage = JSON.parse(lastMessage.data);
+      if (message.status === 'Success') {
+        if (message.data.chess_state) {
+          setChessState(message.data.chess_state);
+        } else if (message.data.moves) {
+          setValidMoves(message.data.moves);
         }
-        const default_chess_state = await getGameState(pokemon_name);
-        setChessState(default_chess_state);
-      } catch (error) {
-        console.error("Failed to fetch chess board", error);
+      } else if (message.status === 'Error') {
+        console.error('Server error:', message.message);
+        // TODO: Display error message to user
       }
     }
-    loadChessBoard();
-  }, []);
+  }, [lastMessage]);
 
-  async function handlePieceClick(row: number, col: number){
-    try {
-      const moves = await getMoves(pokemon_name, row, col);
-      setValidMoves(moves);
-    } catch (error) {
-      console.error("Failed to fetch valid moves", error);
+  useEffect(() => {
+    switch (readyState) {
+      case ReadyState.CONNECTING:
+        setConnectionStatus('Connecting');
+        break;
+      case ReadyState.OPEN:
+        setConnectionStatus('Connected');
+        break;
+      case ReadyState.CLOSING:
+        setConnectionStatus('Closing');
+        break;
+      case ReadyState.CLOSED:
+        setConnectionStatus('Disconnected');
+        break;
+      default:
+        setConnectionStatus('Unknown');
+        break;
     }
-  }
+  }, [readyState]);
 
-  async function handlePieceSelection(piece: string) {
-    try {
-      const updatedState = await selectPawnPromotionPiece(pokemon_name, piece);
-      setChessState(updatedState);
-    } catch (error) {
-      console.error("Failed to select pawn promotion piece", error);
+  const sendWebSocketMessage = useCallback((message: ClientMessage) => {
+    if (readyState === ReadyState.OPEN) {
+      sendMessage(JSON.stringify(message));
+    } else {
+      console.warn('WebSocket is not open. Cannot send message:', message);
     }
-  
-  }
+  }, [sendMessage, readyState]);
 
-  // Function to handle making a move
-  async function handleMakeMove(move: Move) {
-    try {
-      // Assuming apiMakeMove sends a move to the server and returns the updated ChessState
-      const updatedState = await movePiece(pokemon_name, move.from_row, move.from_col, move.to_row, move.to_col);
-      setChessState(updatedState);
-      setValidMoves([]); // Clear valid moves after a move has been made
-    } catch (error) {
-      console.error("Failed to make a move", error);
+  const handlePieceClick = useCallback((row: number, col: number) => {
+    if (pokemon_name) {
+      sendWebSocketMessage({ action: 'GetMoves', payload: { name: pokemon_name, row, col } });
     }
-  }
-  
-  // undo move
-  async function undoMove() {
-    try {
-      const updatedState = await getPreviousState(pokemon_name);
-      setChessState(updatedState);
-    } catch (error) {
-      console.error("Failed to fetch chess board", error);
+  }, [sendWebSocketMessage, pokemon_name]);
+
+  const handleMakeMove = useCallback((move: Move) => {
+    if (pokemon_name) {
+      sendWebSocketMessage({
+        action: 'MovePiece',
+        payload: {
+          name: pokemon_name,
+          from_row: move.from_row,
+          from_col: move.from_col,
+          to_row: move.to_row,
+          to_col: move.to_col
+        }
+      });
+      setValidMoves([]);
     }
-  }
-  // redo move
-  async function redoMove() {
-    try {
-      const updatedState = await getNextState(pokemon_name);
-      setChessState(updatedState);
-    } catch (error) {
-      console.error("Failed to fetch chess board", error);
+  }, [sendWebSocketMessage, pokemon_name]);
+
+  const handlePieceSelection = useCallback((piece: string) => {
+    if (pokemon_name) {
+      sendWebSocketMessage({ action: 'SelectPawnPromotionPiece', payload: { name: pokemon_name, piece_str: piece } });
     }
+  }, [sendWebSocketMessage, pokemon_name]);
+
+  const undoMove = useCallback(() => {
+    if (pokemon_name) {
+      sendWebSocketMessage({ action: 'GetPreviousState', payload: { name: pokemon_name } });
+    }
+  }, [sendWebSocketMessage, pokemon_name]);
+
+  const redoMove = useCallback(() => {
+    if (pokemon_name) {
+      sendWebSocketMessage({ action: 'GetNextState', payload: { name: pokemon_name } });
+    }
+  }, [sendWebSocketMessage, pokemon_name]);
+
+  useEffect(() => {
+    if (readyState === ReadyState.OPEN && pokemon_name) {
+      sendWebSocketMessage({ action: 'GetPreviousState', payload: { name: pokemon_name } });
+    }
+  }, [readyState, sendWebSocketMessage, pokemon_name]);
+
+  if (!pokemon_name) {
+    return <Navigate to="/" />;
   }
 
   return (
     <div className="game-container">
-      <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-      <div className="scaling-container">
-        <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
-        {chessState && <MessageBanner chessState={chessState} turn={chessState.turn_count} game_name={pokemon_name} />}
-        {chessState && (
-          <>
-            <PokeballIndicator
-            displayLeft={true} 
+      {
+        //<div>Connection status: {connectionStatus}</div>--->
+      }
+      {chessState ? (
+        <>
+          <div className="scaling-container">
+          <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
+          <PokeballIndicator 
+            displayLeft={true}
             hidden={isFlipped ? chessState.player === Player.White : chessState.player === Player.Black}
             />
-            <Chessboard 
-              chessState={chessState} 
-              onPieceClick={handlePieceClick} 
-              onPieceSelection={handlePieceSelection}
-              makeMove={handleMakeMove}
-              validMoves={validMoves} 
-              isFlipped={player !== "black"}
-            />
-            <PokeballIndicator 
+
+          <Chessboard
+            chessState={chessState}
+            onPieceClick={handlePieceClick}
+            onPieceSelection={handlePieceSelection}
+            makeMove={handleMakeMove}
+            validMoves={validMoves}
+            isFlipped={isFlipped}
+          />
+          <PokeballIndicator 
             displayLeft={false}
             hidden={isFlipped ? chessState.player === Player.Black : chessState.player === Player.White}
             />
-            <div>
-              <button className="undo-btn state-btn" onClick={undoMove}></button>
-              <button className="redo-btn state-btn" onClick={redoMove}></button>
-            </div>
-          </>
-        )}
-      </div>
+          <div>
+            <button className="undo-btn state-btn" onClick={undoMove} aria-label="Undo move"></button>
+            <button className="redo-btn state-btn" onClick={redoMove} aria-label="Redo move"></button>
+          </div>
+          </div>
+        </>
+      ) : (
+        <div>Loading game...</div>
+      )}
     </div>
   );
-}
+};
 
-export default Game;
-
+export default ChessGame;
