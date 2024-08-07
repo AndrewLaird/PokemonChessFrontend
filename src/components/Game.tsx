@@ -4,6 +4,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ChessState, Move, Player } from '../utils/chess_structs';
 import Chessboard from './Chessboard';
 import PokeballIndicator from './PokeballIndicator';
+import LoadingPokeBall from './LoadingPokeBall';
 import './Game.css';
 import PokemonTitle from '../assets/PokemonTitle.png';
 
@@ -12,7 +13,8 @@ type ClientMessage =
   | { action: 'MovePiece', payload: { name: string, from_row: number, from_col: number, to_row: number, to_col: number } }
   | { action: 'SelectPawnPromotionPiece', payload: { name: string, piece_str: string } }
   | { action: 'GetPreviousState', payload: { name: string } }
-  | { action: 'GetNextState', payload: { name: string } };
+  | { action: 'GetNextState', payload: { name: string } }
+  | { action: 'GetCurrentState', payload: { name: string } };
 
 type ServerMessage = 
   | { status: 'Success', data: { chess_state?: ChessState, moves?: Move[] } }
@@ -78,6 +80,7 @@ const ChessGame: React.FC = () => {
     if (readyState === ReadyState.OPEN) {
       sendMessage(JSON.stringify(message));
     } else {
+      // reconnect
       console.warn('WebSocket is not open. Cannot send message:', message);
     }
   }, [sendMessage, readyState]);
@@ -124,7 +127,7 @@ const ChessGame: React.FC = () => {
 
   useEffect(() => {
     if (readyState === ReadyState.OPEN && pokemon_name) {
-      sendWebSocketMessage({ action: 'GetPreviousState', payload: { name: pokemon_name } });
+      sendWebSocketMessage({ action: 'GetCurrentState', payload: { name: pokemon_name } });
     }
   }, [readyState, sendWebSocketMessage, pokemon_name]);
 
@@ -165,7 +168,7 @@ const ChessGame: React.FC = () => {
           </div>
         </>
       ) : (
-        <div>Loading game...</div>
+        <div><div className="scaling-container"><div>Loading game...</div><div><LoadingPokeBall/></div></div></div>
       )}
     </div>
   );
