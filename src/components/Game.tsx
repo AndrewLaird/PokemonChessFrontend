@@ -126,6 +126,7 @@ const ChessGame: React.FC = () => {
   }, [sendWebSocketMessage, pokemon_name]);
 
   useEffect(() => {
+    console.log("hello", readyState, pokemon_name);
     if (readyState === ReadyState.OPEN && pokemon_name) {
       sendWebSocketMessage({ action: 'GetCurrentState', payload: { name: pokemon_name } });
     }
@@ -138,7 +139,7 @@ const ChessGame: React.FC = () => {
   return (
     <div className="game-container">
       {
-        //<div>Connection status: {connectionStatus}</div>--->
+        <div style={{ color: 'white' }}>Connection status: {connectionStatus}</div>
       }
       {chessState ? (
         <>
