@@ -8,6 +8,7 @@ import LoadingPokeBall from './LoadingPokeBall';
 import './Game.css';
 import PokemonTitle from '../assets/PokemonTitle.png';
 import MessageBanner from './MessageBanner';
+import RedirectButtons from './RedirectButtons';
 
 type ClientMessage = 
   | { action: 'GetMoves', payload: { name: string, row: number, col: number } }
@@ -151,6 +152,7 @@ const ChessGame: React.FC = () => {
         <>
           <div className="scaling-container">
           <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
+          <RedirectButtons />
           <MessageBanner chessState={chessState} />
           <PokeballIndicator 
             displayLeft={true}
@@ -169,7 +171,7 @@ const ChessGame: React.FC = () => {
             displayLeft={false}
             hidden={isFlipped ? chessState.player === Player.Black : chessState.player === Player.White}
             />
-          <div>
+          <div className="game-buttons-container">
             <button className="undo-btn state-btn" onClick={undoMove} aria-label="Undo move"></button>
             <button className="redo-btn state-btn" onClick={redoMove} aria-label="Redo move"></button>
           </div>
