@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { ChessState, Move, Player } from '../utils/chess_structs';
+import { ChessState, Move, Player, InfoMessage } from '../utils/chess_structs';
 import Chessboard from './Chessboard';
 import PokeballIndicator from './PokeballIndicator';
 import LoadingPokeBall from './LoadingPokeBall';
@@ -20,7 +20,7 @@ type ServerMessage =
   | { status: 'Success', data: { chess_state?: ChessState, moves?: Move[] } }
   | { status: 'Error', message: string };
 
-const WEBSOCKET_URL = 'ws://localhost:3000/ws';
+const WEBSOCKET_URL = `ws://${window.location.hostname}:3000/ws`;
 
 const ChessGame: React.FC = () => {
   const { pokemon_name, player } = useParams<{ pokemon_name?: string, player?: string }>();
@@ -128,12 +128,23 @@ const ChessGame: React.FC = () => {
   }, [sendWebSocketMessage, pokemon_name]);
 
   useEffect(() => {
-    console.log(readyState, pokemon_name);
     if (readyState === ReadyState.OPEN && pokemon_name) {
-      console.log("going");
       sendWebSocketMessage({ action: 'GetCurrentState', payload: { name: pokemon_name } });
     }
   }, [readyState, sendWebSocketMessage, pokemon_name]);
+
+  const parseInfoMessage = (message: InfoMessage) => {
+    switch (message) {
+      case InfoMessage.SuperEffective:
+        return "It's super effective!";
+      case InfoMessage.NotVeryEffective:
+        return "It's not very effective.";
+      case InfoMessage.NoEffect:
+        return "It has no effect...";
+      default:
+        return '';
+    }
+  };
 
   if (!pokemon_name) {
     return <Navigate to="/" />;
@@ -141,6 +152,10 @@ const ChessGame: React.FC = () => {
 
   return (
     <div className="game-container">
+      <style>
+      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+      </style>
+
       {
         <div style={{ color: 'white' }}>Connection status: {connectionStatus}</div>
       }
@@ -148,6 +163,11 @@ const ChessGame: React.FC = () => {
         <>
           <div className="scaling-container">
           <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
+          <div className={`info-container ${!chessState.info_message ? 'info-container-hidden' : ''}`}>
+              <div className="info-message">
+                {chessState.info_message && parseInfoMessage(chessState.info_message)}
+              </div>
+          </div>
           <PokeballIndicator 
             displayLeft={true}
             hidden={isFlipped ? chessState.player === Player.White : chessState.player === Player.Black}

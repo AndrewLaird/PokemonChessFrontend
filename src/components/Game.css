@@ -63,3 +63,35 @@
 .redo-btn::after {
   content: ">";
 }
+
+
+/* Gameboy-style CSS */
+:root {
+    --gb-darkest-green: #0f380f;
+    --gb-dark-green: #306230;
+    --gb-light-green: #8bac0f;
+    --gb-lightest-green: #9bbc0f;
+    --info-bg-color: #e5e7eb;
+}
+
+.info-container {
+    background-color: var(--info-bg-color);
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 20px;
+
+}
+.info-container-hidden {
+    visibility: hidden;
+}
+
+.info-message {
+    font-size: 16px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+
+}

@@ -14,7 +14,6 @@ const Home: React.FC = () => {
         const criticalHits = document.getElementById('critical-hits') as HTMLInputElement;
         const misses = document.getElementById('miss') as HTMLInputElement;
 
-        console.log("starting game: " + gameName);
         await startGame(
           gameName,
           localPlay.checked,
