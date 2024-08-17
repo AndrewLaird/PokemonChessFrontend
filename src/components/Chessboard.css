@@ -24,7 +24,7 @@
 }
 
 .board-row {
-  width:100%
+  width:100%;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
 }
@@ -41,8 +41,8 @@
 
 @media only screen and (max-width: 600px) {
   .board-square {
-    width: 60px
-    height: 60px
+    width: 60px;
+    height: 60px;
   }
 }
 
