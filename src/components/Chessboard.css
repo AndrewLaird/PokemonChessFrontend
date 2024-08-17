@@ -2,7 +2,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .chess-board-container {
@@ -25,12 +24,13 @@
 }
 
 .board-row {
-  display: flex;
-  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
 }
 
 .board-square {
-  flex: 1;
+  width: 100%;
+  height: 100%;
   position: relative;
   border: 1px solid black;
 }
