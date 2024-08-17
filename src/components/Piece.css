@@ -1,16 +1,3 @@
-/*.piece {*/
-  /*[> example styles, adjust as necessary <]*/
-  /*width: 80px; [> relative to the parent square <]*/
-  /*height: 80px; [> relative to the parent square <]*/
-  /*position: absolute;*/
-  /*top: 10%; [> centers the piece <]*/
-  /*left: 10%; [> centers the piece <]*/
-/*}*/
-
-
-.piece {
-  display: inline-block; /* Helps control the width to content */
-}
 
 /* Styling for the text to sit 20% from the bottom */
 .piece-type-description {
@@ -100,6 +87,3 @@
 .Fairy {
     background-color: #D685AD;
 }
-
-/* ... add more styles for other Pokémon types */
-
