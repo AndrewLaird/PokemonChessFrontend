@@ -7,6 +7,7 @@ import PokeballIndicator from './PokeballIndicator';
 import LoadingPokeBall from './LoadingPokeBall';
 import './Game.css';
 import PokemonTitle from '../assets/PokemonTitle.png';
+import MessageBanner from './MessageBanner';
 
 type ClientMessage = 
   | { action: 'GetMoves', payload: { name: string, row: number, col: number } }
@@ -133,19 +134,6 @@ const ChessGame: React.FC = () => {
     }
   }, [readyState, sendWebSocketMessage, pokemon_name]);
 
-  const parseInfoMessage = (message: InfoMessage) => {
-    switch (message) {
-      case InfoMessage.SuperEffective:
-        return "It's super effective!";
-      case InfoMessage.NotVeryEffective:
-        return "It's not very effective.";
-      case InfoMessage.NoEffect:
-        return "It has no effect...";
-      default:
-        return '';
-    }
-  };
-
   if (!pokemon_name) {
     return <Navigate to="/" />;
   }
@@ -163,11 +151,7 @@ const ChessGame: React.FC = () => {
         <>
           <div className="scaling-container">
           <img className="chess-title" src={PokemonTitle} alt="Pokemon Chess" />
-          <div className={`info-container ${!chessState.info_message ? 'info-container-hidden' : ''}`}>
-              <div className="info-message">
-                {chessState.info_message && parseInfoMessage(chessState.info_message)}
-              </div>
-          </div>
+          <MessageBanner chessState={chessState} />
           <PokeballIndicator 
             displayLeft={true}
             hidden={isFlipped ? chessState.player === Player.White : chessState.player === Player.Black}
