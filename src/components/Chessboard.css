@@ -16,14 +16,15 @@
 .chess-board {
   width: 100%;
   height: 100%;
-  max-width: min(100%, 80vmin);
-  max-height: min(100%, 80vmin);
+  max-width: 80vw;
+  max-height: 80vh;
   aspect-ratio: 1 / 1;
   display: flex;
   flex-direction: column;
 }
 
 .board-row {
+  width:100%
   display: grid;
   grid-template-columns: repeat(8, 1fr);
 }
@@ -40,8 +41,8 @@
 
 @media only screen and (max-width: 600px) {
   .board-square {
-    width: calc(100% / 8);
-    height: calc(100% / 8);
+    width: 60px
+    height: 60px
   }
 }
 
