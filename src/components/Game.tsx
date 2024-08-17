@@ -45,6 +45,8 @@ const ChessGame: React.FC = () => {
       const message: ServerMessage = JSON.parse(lastMessage.data);
       if (message.status === 'Success') {
         if (message.data.chess_state) {
+          // clear valid moves so we don't see trails
+          setValidMoves([]);
           setChessState(message.data.chess_state);
         } else if (message.data.moves) {
           setValidMoves(message.data.moves);
@@ -126,8 +128,9 @@ const ChessGame: React.FC = () => {
   }, [sendWebSocketMessage, pokemon_name]);
 
   useEffect(() => {
-    console.log("hello", readyState, pokemon_name);
+    console.log(readyState, pokemon_name);
     if (readyState === ReadyState.OPEN && pokemon_name) {
+      console.log("going");
       sendWebSocketMessage({ action: 'GetCurrentState', payload: { name: pokemon_name } });
     }
   }, [readyState, sendWebSocketMessage, pokemon_name]);
