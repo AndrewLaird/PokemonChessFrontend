@@ -39,12 +39,27 @@
  * for smart phones, set board-square size directly
  */
 
-/*@media only screen and (max-width: 600px) {*/
-  /*.board-square {*/
-    /*width: 60px;*/
-    /*height: 60px;*/
-  /*}*/
-/*}*/
+@media only screen and (max-width: 600px) {
+  .board-square {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .chess-board {
+    display: grid;
+    grid-template-rows: repeat(8, 40px);
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: none;
+  }
+  
+  .board-row {
+    display: grid;
+    grid-template-columns: repeat(8, 40px);
+    width: auto;
+  }
+}
 
 .board-square::before {
   content: '';
@@ -62,6 +77,12 @@
   justify-content: center;
   align-items: center;
   font-size: calc(min(4vmin, 4vh));
+}
+
+@media only screen and (max-width: 600px) {
+  .board-square .piece {
+    font-size: 20px;
+  }
 }
 
 .white-square {

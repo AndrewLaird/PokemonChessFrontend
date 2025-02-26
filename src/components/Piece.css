@@ -15,6 +15,15 @@
   z-index: 1; /* Keeps the text on top of the background */
 }
 
+@media only screen and (max-width: 600px) {
+  .piece-type-description {
+    font-size: 8px;
+    min-width: 90%;
+    padding: 1px 4px;
+    top: 75%;
+  }
+}
+
 /* Color themes for different Pokémon types (as an example) */
 .Normal {
     background-color: #A8A77A;
