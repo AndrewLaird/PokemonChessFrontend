@@ -22,7 +22,7 @@ const Tooltip: React.FC<TooltipProps> = ({ children, content, position }) => {
             case 'right':
                 return 'tooltip-right';
             case 'top':
-                return 'tooltip-right';
+                return 'tooltip-top';
             default:
                 return 'tooltip-right';
         }
